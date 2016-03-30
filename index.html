@@ -1,0 +1,79 @@
+<html>
+  <head>
+    <title>Bubble Chart</title>
+    <style>
+    * {
+      font-family: sans-serif;
+    }
+    
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #000;
+    }
+    
+    .axis path { stroke: none; }
+    
+    .axis { font-size: 14px; }
+    
+    .y.axis .tick line {
+      stroke-dasharray: 1, 5;
+    }
+    </style>
+  </head>
+  <body>
+     <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+     <script src="bubble-chart.js"></script>
+     <script>
+       var margin = { top: 10, left: 80, bottom: 30, right: 10 },
+           width = 800 - margin.left - margin.right,
+           height = 600 - margin.top - margin.bottom;
+       
+       var x = function(d) { return d["Petal.Length"]; },
+           y = function(d) { return d["Species"]; },
+           r = function(d) { return d["Sepal.Length"] * d["Sepal.Width"]; };
+       
+       var xScale = d3.scale.linear().range([0, width]),
+           yScale = d3.scale.ordinal().rangeRoundBands([height, 0]),
+           rScale = d3.scale.linear().range([3, 10]),
+           fillScale = d3.scale.threshold()
+            .domain([1.5, 4, 5, 6])
+            .range(["#21313E", "#1F6165", "#389576", "#84C671", "#EFEE69"])
+       
+       var xAxis = d3.svg.axis().scale(xScale).orient("bottom"),
+           yAxis = d3.svg.axis().scale(yScale).orient("left");
+       
+       var bubbleChart = d3.bubbleChart()
+         .size([width, height])
+         .x(function(d) { return xScale(x(d)); })
+         .y(function(d) { return yScale(y(d)) + yScale.rangeBand()/2; })
+         .r(function(d) { return rScale(r(d)); })
+         .fill(function(d) { return fillScale(x(d)); })
+         .xGravity(function(dx, k, d) { return dx * k * 5; })
+         .yGravity(function(dy, k , d) { return dy * k / 5; });
+       
+       var svg = d3.select("body").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      
+      d3.json("iris.json", function(error, iris) {
+        if (error) throw error;
+        
+        xScale.domain([0, d3.max(iris, x)]);
+        yScale.domain(iris.map(y));
+        rScale.domain(d3.extent(iris, r));
+        
+        svg.append("g").attr("class", "x axis").call(xAxis)
+          .attr("transform", "translate(0," + height + ")");
+        svg.append("g").attr("class", "y axis").call(yAxis) 
+          .selectAll(".tick line")
+            .attr("x2", width);
+        
+        svg.call(bubbleChart, iris);
+      });
+        
+     </script>
+  </body>
+</html>
