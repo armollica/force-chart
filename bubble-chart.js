@@ -17,9 +17,9 @@ d3.bubbleChart = function() {
     .gravity(0);
     
   var draggable = true,
-      xGravity = function(dx, k, d) { return dx * k; },
-      yGravity = function(dy, k, d) { return dy * k; },
-      rGravity = function(dr, k, d) { return dr * k; };
+      xGravity = function(d) { return 1; },
+      yGravity = function(d) { return 1; },
+      rGravity = function(d) { return 1; };
   
   function chart(selection, nodes) {
     
@@ -66,9 +66,9 @@ d3.bubbleChart = function() {
             dy = d.y0 - d.y,
             dr = d.r0 - d.r;
             
-        d.x += xGravity(dx, k, d);
-        d.y += yGravity(dy, k, d);
-        d.r += rGravity(dr, k, d);
+        d.x += dx * k * xGravity(d);
+        d.y += dy * k * yGravity(d);
+        d.r += dr * k * rGravity(d);
       };
     }
 
@@ -151,19 +151,34 @@ d3.bubbleChart = function() {
   
   chart.xGravity = function(_) {
     if (!arguments.length) return xGravity;
-    xGravity = _;
+    if (typeof _ === "number") {
+      xGravity = function() { return _; };
+    }
+    else if (typeof _ === "function") {
+      xGravity = _;
+    }
     return chart;
   };
   
   chart.yGravity = function(_) {
     if (!arguments.length) return yGravity;
-    yGravity = _;
+    if (typeof _ === "number") {
+      yGravity = function() { return _; };
+    }
+    else if (typeof _ === "function") {
+      yGravity = _;
+    }
     return chart;
   };
   
   chart.rGravity = function(_) {
     if (!arguments.length) return rGravity;
-    rGravity = _;
+    if (typeof _ === "number") {
+      rGravity = function() { return _; };
+    }
+    else if (typeof _ === "function") {
+      rGravity = _;
+    }
     return chart;
   };
   

@@ -49,8 +49,8 @@
          .y(function(d) { return yScale(y(d)) + yScale.rangeBand()/2; })
          .r(function(d) { return rScale(r(d)); })
          .fill(function(d) { return fillScale(x(d)); })
-         .xGravity(function(dx, k, d) { return dx * k * 5; })
-         .yGravity(function(dy, k , d) { return dy * k / 5; });
+         .xGravity(5)
+         .yGravity(1/5);
        
        var svg = d3.select("body").append("svg")
           .attr("width", width + margin.left + margin.right)
