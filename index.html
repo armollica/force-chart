@@ -17,13 +17,17 @@
     .axis { font-size: 14px; }
     
     .y.axis .tick line {
-      stroke-dasharray: 1, 5;
+      stroke-dasharray: 1, 8;
+    }
+    
+    .node rect {
+      stroke-width: 2px;
     }
     </style>
   </head>
   <body>
      <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
-     <script src="bubble-chart.js"></script>
+     <script src="force-chart.js"></script>
      <script>
        var margin = { top: 10, left: 80, bottom: 30, right: 10 },
            width = 800 - margin.left - margin.right,
@@ -38,19 +42,28 @@
            rScale = d3.scale.linear().range([3, 10]),
            fillScale = d3.scale.threshold()
             .domain([1.5, 4, 5, 6])
-            .range(["#21313E", "#1F6165", "#389576", "#84C671", "#EFEE69"])
+            .range(["#21313E", "#1F6165", "#389576", "#84C671", "#EFEE69"]),
+           strokeScale = d3.scale.linear()
+            .domain([-20, 0, 20])
+            .range(["brown", "white", "steelblue"]);
        
        var xAxis = d3.svg.axis().scale(xScale).orient("bottom"),
            yAxis = d3.svg.axis().scale(yScale).orient("left");
        
-       var bubbleChart = d3.bubbleChart()
+       var bubbleChart = d3.forceChart()
          .size([width, height])
          .x(function(d) { return xScale(x(d)); })
          .y(function(d) { return yScale(y(d)) + yScale.rangeBand()/2; })
          .r(function(d) { return rScale(r(d)); })
-         .fill(function(d) { return fillScale(x(d)); })
-         .xGravity(5)
-         .yGravity(1/5);
+         .xGravity(25)
+         .yGravity(1/5)
+         .shape("square")
+         .tickUpdate(function(nodes) {
+           nodes.selectAll("rect")
+            .style("stroke", function(d) {
+              return strokeScale(d.x - d.x0);
+            });
+         });
        
        var svg = d3.select("body").append("svg")
           .attr("width", width + margin.left + margin.right)
@@ -67,11 +80,19 @@
         
         svg.append("g").attr("class", "x axis").call(xAxis)
           .attr("transform", "translate(0," + height + ")");
+          
         svg.append("g").attr("class", "y axis").call(yAxis) 
           .selectAll(".tick line")
             .attr("x2", width);
         
-        svg.call(bubbleChart, iris);
+        svg.call(bubbleChart, iris)
+          .selectAll(".node")
+            .append("rect")
+            .attr("x", function(d) { return -d.r; })
+            .attr("y", function(d) { return -d.r; })
+            .attr("width", function(d) { return 2*d.r; })
+            .attr("height", function(d) { return 2*d.r; })
+            .style("fill", function(d) { return fillScale(x(d)); });
       });
         
      </script>

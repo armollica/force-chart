@@ -1,27 +1,29 @@
-d3.bubbleChart = function() {
+d3.forceChart = function() {
   var width = 400, 
       height = 300, 
-      padding = 3;
-  
-  var x = function(d) { return d[0]; },
+      padding = 3,
+      x = function(d) { return d[0]; },
       y = function(d) { return d[1]; },
       r = function(d) { return d[2]; },
       xStart = function(d) { return x(d) + 50*Math.random() - 25},
       yStart = function(d) { return y(d) + 50*Math.random() - 25},
       rStart = function(d) { return r(d); },
-      stroke = function(d) { return null; },
-      fill = function(d) { return null; };
+      draggable = true,
+      xGravity = function(d) { return 1; },
+      yGravity = function(d) { return 1; },
+      rGravity = function(d) { return 1; },
+      shape = "circle",
+      tickUpdate = function() {};
   
   var force = d3.layout.force()
     .charge(0)
     .gravity(0);
-    
-  var draggable = true,
-      xGravity = function(d) { return 1; },
-      yGravity = function(d) { return 1; },
-      rGravity = function(d) { return 1; };
   
   function chart(selection, nodes) {
+    
+    if (shape === "circle") { collide = collideCircle; }
+    else if (shape === "square") { collide = collideSquare; }
+    else { console.error("forceChart.shape must be 'circle' or 'square'"); }
     
     nodes = nodes
       .map(function(d) {
@@ -45,19 +47,19 @@ d3.bubbleChart = function() {
       .on("tick", tick)
       .start();
     
-    var bubbles = selection.selectAll(".bubble").data(nodes)
-      .enter().append("circle")
-      .call(draggable ? force.drag : null);
+    var bubbles = selection.selectAll(".node").data(nodes)
+      .enter().append("g")
+        .attr("class", "node")
+        .call(draggable ? force.drag : null);
     
     function tick(e) {
       bubbles
         .each(gravity(e.alpha * .1))
         .each(collide(.5))
-        .attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; })
-        .attr("r", function(d) { return d.r; })
-        .style("fill", function(d) { return fill(d); })
-        .style("stroke", function(d) { return stroke(d); });
+        .attr("transform", function(d) {
+          return "translate(" + d.x + "," + d.y + ")";
+        })
+        .call(tickUpdate);
     }
 
     function gravity(k) {
@@ -72,7 +74,7 @@ d3.bubbleChart = function() {
       };
     }
 
-    function collide(k) {
+    function collideCircle(k) {
       var q = d3.geom.quadtree(nodes);
       return function(node) {
         var nr = node.r + padding,
@@ -98,6 +100,38 @@ d3.bubbleChart = function() {
         });
       };
     }
+    
+    function collideSquare(k) {
+    var q = d3.geom.quadtree(nodes);
+    return function(node) {
+      var nr = node.r + padding,
+          nx1 = node.x - nr,
+          nx2 = node.x + nr,
+          ny1 = node.y - nr,
+          ny2 = node.y + nr;
+      q.visit(function(quad, x1, y1, x2, y2) {
+        if (quad.point && (quad.point !== node)) {
+          var x = node.x - quad.point.x,
+              y = node.y - quad.point.y,
+              lx = Math.abs(x),
+              ly = Math.abs(y),
+              r = nr + quad.point.r;
+          if (lx < r && ly < r) {
+            if (lx > ly) {
+              lx = (lx - r) * (x < 0 ? -k : k);
+              node.x -= lx;
+              quad.point.x += lx;
+            } else {
+              ly = (ly - r) * (y < 0 ? -k : k);
+              node.y -= ly;
+              quad.point.y += ly;
+            }
+          }
+        }
+        return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+      });
+    };
+  }
   }
   
   chart.size = function(_) {
@@ -137,18 +171,6 @@ d3.bubbleChart = function() {
     return chart;
   };
   
-  chart.fill = function(_) {
-    if (!arguments.length) return fill;
-    fill = _;
-    return chart;
-  };
-  
-  chart.stroke = function(_) {
-    if (!arguments.length) return stroke;
-    stroke = _;
-    return chart;
-  };
-  
   chart.xGravity = function(_) {
     if (!arguments.length) return xGravity;
     if (typeof _ === "number") {
@@ -179,6 +201,18 @@ d3.bubbleChart = function() {
     else if (typeof _ === "function") {
       rGravity = _;
     }
+    return chart;
+  };
+  
+  chart.shape = function(_) {
+    if (!arguments.length) return shape;
+    shape = _;
+    return chart;
+  };
+  
+  chart.tickUpdate = function(_) {
+    if (!arguments.length) return tickUpdate;
+    tickUpdate = _;
     return chart;
   };
   
