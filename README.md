@@ -5,6 +5,14 @@ Useful when you want to prevent a chart's visual elements from overlapping.
 
 ### Examples
 
+<table>
+  <tr>
+    <td><a href="http://bl.ocks.org/armollica/5a728eea67694fba94d675dd036d6ecc"><img src="img/cartogram.png" width="230"></a></td>
+    <td><a href="http://bl.ocks.org/armollica/2dcfd66a64922990995f905aa0dc4d7b"><img src="img/movies.png" width="230"></a></td>
+    <td><a href="http://bl.ocks.org/armollica/93491e923d72e81df769"><img src="img/jobs.png" width="230"></a></td>
+  </tr>
+</table>
+
 ### API Reference
 
 *#* d3.**forceChart**()
