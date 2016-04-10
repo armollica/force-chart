@@ -15,6 +15,13 @@ Useful when you want to prevent a chart's visual elements from overlapping.
   </tr>
 </table>
 
+### How To Use
+Save the `force-chart.js` file from this repo and include it in your HTML after including D3:
+```html
+<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="force-chart.js"></script>
+```
+
 ### API Reference
 
 *#* d3.**forceChart**()
