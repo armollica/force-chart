@@ -1,9 +1,8 @@
 # d3.forceChart
 
-A D3 plugin that simplifies using 
-[force-directed layouts](https://github.com/mbostock/d3/wiki/Force-Layout) 
-to make charts.
-Useful when you want to prevent a chart's visual elements from overlapping.
+D3 plugin that simplifies making charts and cartograms with 
+[force-directed layouts](https://github.com/mbostock/d3/wiki/Force-Layout).
+Useful when you want to prevent visual elements from overlapping.
 
 ### Examples
 
