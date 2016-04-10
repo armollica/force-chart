@@ -39,7 +39,7 @@ d3.forceChart = function() {
     var gNodes = selection.selectAll(".node").data(nodes)
       .enter().append("g")
         .attr("class", "node")
-        .call(draggable ? force.drag : null);
+        .call(draggable ? force.drag : function() {});
         
     force
       .size([width, height])
