@@ -9,8 +9,8 @@ Useful when you want to prevent a chart's visual elements from overlapping.
 
 <table>
   <tr>
-    <td><a href="http://bl.ocks.org/armollica/5a728eea67694fba94d675dd036d6ecc"><img src="img/cartogram.png" width="230"></a></td>
     <td><a href="http://bl.ocks.org/armollica/2dcfd66a64922990995f905aa0dc4d7b"><img src="img/movies.png" width="230"></a></td>
+    <td><a href="http://bl.ocks.org/armollica/5a728eea67694fba94d675dd036d6ecc"><img src="img/cartogram.png" width="230"></a></td>
     <td><a href="http://bl.ocks.org/armollica/93491e923d72e81df769"><img src="img/jobs.png" width="230"></a></td>
   </tr>
 </table>
@@ -129,7 +129,7 @@ var xScale = d3.scale.linear().range([0, width]),
     
 var forceChart = d3.forceChart()
   .x(function(d) { return xScale(d.xVal); })
-  .y(function(d) { return yScale(d.yVal); })
+  .y(function(d) { return yScale(d.yVal) + yScale.rangeBand()/2; })
   .r(function(d) { return rScale(d.rVal); });
 ```
 
@@ -168,7 +168,7 @@ to reach the targeted (x, y)-coordinates and radius set in the
 means the element is
 more likely get to its target for that dimension. For example, if you care 
 more about the *x*-axis accuracy than the *y*-axis accuracy you can set the 
-*x*-gravity strength to a higher value and the *y*-gravity strength to
+*x*-gravity strength to a high value and the *y*-gravity strength to
 a low value:
 
 ```javascript
@@ -177,8 +177,17 @@ var forceChart = d3.forceChart()
   .yGravity(1/10);
 ```
 This is a reasonable thing to do when *x* is a continuous variable and
-*y* is ordinal and is defined by range bands.
+*y* is ordinal and defined by range bands.
 
+You can also give some node elements more gravity than others.
+For example, you can set the *x*-gravity strength to the radius of
+each element, making it more likely for larger nodes to be in the
+targeted *x*-position:
+
+```javascript
+var forceChart = d3.forceChart()
+  .xGravity(function(d) { return d.r; });
+```
 
 *#* forceChart.**xGravity**([*xGravity*])
 
