@@ -5,8 +5,6 @@ Useful when you want to prevent a chart's visual elements from overlapping.
 
 ### Examples
 
-
-
 ### API Reference
 
 *#* d3.**forceChart**()
