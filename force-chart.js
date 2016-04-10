@@ -41,19 +41,19 @@ d3.forceChart = function() {
         return d;    
       });
       
+    var gNodes = selection.selectAll(".node").data(nodes)
+      .enter().append("g")
+        .attr("class", "node")
+        .call(draggable ? force.drag : null);
+        
     force
       .size([width, height])
       .nodes(nodes)
       .on("tick", tick)
       .start();
-    
-    var bubbles = selection.selectAll(".node").data(nodes)
-      .enter().append("g")
-        .attr("class", "node")
-        .call(draggable ? force.drag : null);
-    
+      
     function tick(e) {
-      bubbles
+      gNodes
         .each(gravity(e.alpha * .1))
         .each(collide(.5))
         .attr("transform", function(d) {
@@ -143,19 +143,34 @@ d3.forceChart = function() {
   
   chart.x = function(_) {
     if (!arguments.length) return x;
-    x = _;
+    if (typeof _ === "number") {
+      x = function() { return _; };
+    }
+    else if (typeof _ === "function") {
+      x = _;
+    }
     return chart;
   };
   
   chart.y = function(_) {
     if (!arguments.length) return y;
-    y = _;
+    if (typeof _ === "number") {
+      y = function() { return _; };
+    }
+    else if (typeof _ === "function") {
+      y = _;
+    }
     return chart;
   };
   
   chart.r = function(_) {
     if (!arguments.length) return r;
-    r = _;
+    if (typeof _ === "number") {
+      r = function() { return _; };
+    }
+    else if (typeof _ === "function") {
+      r = _;
+    }
     return chart;
   };
   
@@ -200,6 +215,39 @@ d3.forceChart = function() {
     }
     else if (typeof _ === "function") {
       rGravity = _;
+    }
+    return chart;
+  };
+  
+  chart.xStart = function(_) {
+    if (!arguments.length) return xStart;
+    if (typeof _ === "number") {
+      xStart = function() { return _; };
+    }
+    else if (typeof _ === "function") {
+      xStart = _;
+    }
+    return chart;
+  };
+  
+  chart.yStart = function(_) {
+    if (!arguments.length) return yStart;
+    if (typeof _ === "number") {
+      yStart = function() { return _; };
+    }
+    else if (typeof _ === "function") {
+      yStart = _;
+    }
+    return chart;
+  };
+  
+  chart.rStart = function(_) {
+    if (!arguments.length) return rStart;
+    if (typeof _ === "number") {
+      rStart = function() { return _; };
+    }
+    else if (typeof _ === "function") {
+      rStart = _;
     }
     return chart;
   };
