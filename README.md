@@ -85,6 +85,30 @@ can be saved for use in the static chart.
 For more detail see the API reference for the force layout's 
 [drag feature](https://github.com/mbostock/d3/wiki/Force-Layout#drag).
 
+*#* forceChart.**tickUpdate**([tickUpdate])
+
+Sets a function that will be called for every "tick" in the force chart's
+animation. The tickUpdate function is called on each `<g>` node element after 
+the node has been translated into its current position. If not specified, 
+returns the current tickUpdate function. Defaults to doing nothing.
+
+This can be useful if you want to have a visual indicator of how far off
+a node is from its targeted position, for example by making the stroke blue
+if the *x*-position is to the right of the targeted *x* and making it red
+if it is to the left of its target:
+
+```javascript
+var errorScale = d3.scale.linear()
+  .domain([-20, 0, 20])
+  .range(["red", "white", "blue"]);
+
+var forceChart()
+  .tickUpdate(function(d) {
+    var node = d3.select(this)
+      .style("stroke", function(d) { return errorScale(d.x0 - d.x); });
+  });        
+```
+
 #### Targets
 
 The *x*-, *y*- and *r*-target accessors set the *targeted* (x,y)-position and 
