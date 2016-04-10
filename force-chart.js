@@ -27,17 +27,12 @@ d3.forceChart = function() {
     
     nodes = nodes
       .map(function(d) {
-        var xTarget = x(d),
-            yTarget = y(d),
-            rTarget = r(d);
-         
         d.x = xStart(d);
         d.y = yStart(d);
         d.r = rStart(d);
         d.x0 = x(d);
         d.y0 = y(d);
         d.r0 = r(d);
-        
         return d;    
       });
       
