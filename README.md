@@ -20,7 +20,7 @@ Useful when you want to prevent visual elements from overlapping.
   <tr>
     <td>
       Swarm + Pile Plot <br>
-      <a href="http://bl.ocks.org/armollica/93491e923d72e81df769"><img src="img/jobs.png" width="230"></a>
+      <a href="http://bl.ocks.org/armollica/0f28622e38434b04907d768df6cec684"><img src="img/1d-distributions.png" width="230"></a>
     </td>
     <td>
       Disjointed Cartogram <br>
