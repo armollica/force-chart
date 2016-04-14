@@ -8,9 +8,24 @@ Useful when you want to prevent visual elements from overlapping.
 
 <table>
   <tr>
-    <td><a href="http://bl.ocks.org/armollica/2dcfd66a64922990995f905aa0dc4d7b"><img src="img/movies.png" width="230"></a></td>
-    <td><a href="http://bl.ocks.org/armollica/5a728eea67694fba94d675dd036d6ecc"><img src="img/cartogram.png" width="230"></a></td>
-    <td><a href="http://bl.ocks.org/armollica/93491e923d72e81df769"><img src="img/jobs.png" width="230"></a></td>
+    <td>
+      Swarm Plot <br>
+      <a href="http://bl.ocks.org/armollica/2dcfd66a64922990995f905aa0dc4d7b"><img src="img/movies.png" width="230"></a>
+    </td>
+    <td>
+      Swarm Plot <br>
+      <a href="http://bl.ocks.org/armollica/93491e923d72e81df769"><img src="img/jobs.png" width="230"></a>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Swarm + Pile Plot <br>
+      <a href="http://bl.ocks.org/armollica/93491e923d72e81df769"><img src="img/jobs.png" width="230"></a>
+    </td>
+    <td>
+      Disjointed Cartogram <br>
+      <a href="http://bl.ocks.org/armollica/5a728eea67694fba94d675dd036d6ecc"><img src="img/cartogram.png" width="230"></a>
+    </td>
   </tr>
 </table>
 
@@ -117,6 +132,21 @@ var forceChart()
     node.select("circle")
       .style("stroke", function(d) { return errorScale(d.x0 - d.x); });
   });        
+```
+
+*#* forceChart.**force**()
+
+Returns the [d3.force.layout()](https://github.com/mbostock/d3/wiki/Force-Layout)
+ object that underlies the `forceChart`. 
+This can be used to stop, start and update the nodes' movement:
+```javascript
+var force = forceChart.force();
+
+force.stop(); // freeze the layout
+for (var i = 0; i < 100; i++) { 
+  force.tick(); // update 100 ticks without rendering  
+}  
+force.start(); // restart layout movement and rendering
 ```
 
 #### Targets

@@ -259,5 +259,7 @@ d3.forceChart = function() {
     return chart;
   };
   
+  chart.force = function(_) { return force; };
+  
   return chart;
 };
