@@ -2,7 +2,17 @@
 
 D3 plugin that simplifies making charts and cartograms that have non-overlapping, force-directed elements.
 
-Wraps [d3.layout.force()](https://github.com/mbostock/d3/wiki/Force-Layout) and the collision detection algorithms found [here](http://bl.ocks.org/mbostock/4055892) and [here](http://bl.ocks.org/mbostock/4055889).
+Wraps [d3.layout.force()](https://github.com/mbostock/d3/wiki/Force-Layout) and 
+the collision detection algorithms found 
+[here](http://bl.ocks.org/mbostock/4055892) and 
+[here](http://bl.ocks.org/mbostock/4055889). 
+
+The force simulation module in [D3 4.0](https://github.com/d3/d3) 
+will make this type of force positioning and collision detection 
+straightforward. If you are using the alpha version of
+D3 4.0, I suggest using [d3-force](https://github.com/d3/d3-force) module. 
+It's flexible and will be built into the future D3.
+
 
 ### Examples
 
